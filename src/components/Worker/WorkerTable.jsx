@@ -15,21 +15,31 @@ const WorkerTable = ({
                      }) => {
 
 
+    const socket = useRef()
     useEffect(() => {
-        const intervalMs = 10000;
-        let id;
+        socket.current = new WebSocket('ws://localhost:5050')
 
-        const tick = () => {
-            if (document.visibilityState === 'visible') {
-                loadWorkers(lazyState);
+        socket.current.onopen = () => {
+            console.log('connected')
+        }
+        socket.current.onmessage = (event) => {
+            const message  = JSON.parse(event.data)
+            if (message.type === 'person'){
+                setLazyState(prev => ({...prev}));
             }
-            id = setTimeout(tick, intervalMs);
-        };
-
-        tick();
-        return () => clearTimeout(id);
-    }, [lazyState]);
-
+        }
+        socket.current.onclose = () => {
+            console.log('Socket закрыт');
+        }
+        socket.current.onerror = () => {
+            console.log('Socket произошла ошибка');
+        }
+        return () => {
+            if (socket.current){
+                socket.current.close();
+            }
+        }
+    }, []);
     const onPage = (event) => {
         setLazyState(prev => ({
             ...prev,

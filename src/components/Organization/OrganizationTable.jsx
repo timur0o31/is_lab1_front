@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useRef} from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
@@ -10,20 +10,30 @@ const OrganizationTable = ({
                                setLazyState,
                                totalRecords
                            }) => {
+    const socket = useRef()
     useEffect(() => {
-        const intervalMs = 5000;
-        let id;
-
-        const tick = () => {
-            if (document.visibilityState === 'visible') {
-                setLazyState(prev => ({ ...prev }));
+        socket.current = new WebSocket('ws://localhost:5050')
+        socket.current.onopen = () => {
+            console.log('connected')
+        }
+        socket.current.onmessage = (event) => {
+            const message  = JSON.parse(event.data)
+            if (message.type === 'organization'){
+                setLazyState(prev => ({...prev}));
             }
-            id = setTimeout(tick, intervalMs);
-        };
-
-        tick();
-        return () => clearTimeout(id);
-    }, [setLazyState]);
+        }
+        socket.current.onclose = () => {
+            console.log('Socket закрыт');
+        }
+        socket.current.onerror = () => {
+            console.log('Socket произошла ошибка');
+        }
+        return () => {
+            if (socket.current){
+                socket.current.close();
+            }
+        }
+    }, []);
 
     const onPage = (event) => {
         setLazyState(prev => ({
