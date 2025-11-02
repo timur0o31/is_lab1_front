@@ -1,0 +1,138 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  height: auto;
+  max-width: 900px;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: 10px 100px;
+  background-color: #ffffff;
+}
+.selected-row {
+  background-color: #e0f0ff;
+  transition: background-color 0.2s ease-in-out;
+}
+.section-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+.dialogBox{
+    width: 70vw;
+    max-width: 900px;
+    padding: 1rem;
+    background-color: #f6f6f6;
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+}
+.dropDownBox{
+  width: 100%;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+.dropDownPanel{
+  background-color: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  max-height: 320px;
+  overflow-Y: auto;
+}
+.dropDownRows{
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background-color: #ffffff;
+  margin-bottom: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease
+}
+.dropRowStyle{
+  font-size: 0.85rem;
+  color: #475569
+}
+.section-block {
+  flex: 1;
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h3 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.toggle-link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.toggle-link:hover {
+  color: #1e40af;
+}
+
+.section-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.section-fields input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  width: 100%;
+}
+.p-datatable .p-column-filter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.p-datatable .p-column-filter-clear-button {
+  margin-left: 0.5rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.p-datatable .p-column-filter-clear-button:hover {
+  opacity: 1;
+}
+.custom-table .p-datatable-tbody > tr {
+  transition: background-color 0.2s ease;
+}
+
+.custom-table .p-datatable-tbody > tr:hover {
+  background-color: #f9fafb;
+}
+
