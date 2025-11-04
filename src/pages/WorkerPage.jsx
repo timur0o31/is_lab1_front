@@ -178,7 +178,6 @@ const WorkerPage = () => {
                     lazyState={lazyState}
                     setLazyState={setLazyState}
                     totalRecords={totalRecords}
-                    loadWorkers={loadWorkers}
                 />
             </Card>
         </div>

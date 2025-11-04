@@ -114,7 +114,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             </div>
             <div>
                 <label> зарплата </label>
-                <input type="number"
+                <input type="number" step ="any"
                        value={formData.salary}
                        onChange={(e) => handleFieldChange("salary", e.target.value)}
                 />

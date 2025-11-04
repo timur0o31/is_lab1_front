@@ -10,14 +10,11 @@ const WorkerTable = ({
                          onSelectionChange,
                          lazyState,
                          setLazyState,
-                         totalRecords,
-                         loadWorkers
+                         totalRecords
                      }) => {
-
-
     const socket = useRef()
     useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:5050')
+        socket.current = new WebSocket('ws/webSocket')
 
         socket.current.onopen = () => {
             console.log('connected')

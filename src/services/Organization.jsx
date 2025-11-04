@@ -58,9 +58,9 @@ const Organization = {
     },
 
     deleteOrganization(id, newOrgId) {
-        return organizationApi.delete(`/${id}/${newOrgId}`);
+        const config = newOrgId != null ? { params: { newOrgId } } : undefined;
+        return organizationApi.delete(`/${id}`, config);
     }
-
 };
 
 export default Organization;

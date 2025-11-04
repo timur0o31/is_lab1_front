@@ -39,7 +39,6 @@ const OrganizationListPage = () => {
 
     const loadOrganizations = async () => {
         try {
-
             const response = await OrganizationService.getOrganizations(lazyState);
             setOrganizations(response.data.content);
             setTotalRecords(response.data.totalRecords);
@@ -75,7 +74,6 @@ const OrganizationListPage = () => {
     ;
     const handleDeleteClick = async (org) => {
         setSelectedOrganization(org);
-
         try {
             const response = await OrganizationService.countWorkers(org.id);
             const count = response.data.count;
@@ -214,9 +212,7 @@ const OrganizationListPage = () => {
                             <Button
                                 label="Удалить"
                                 severity="danger"
-                                onClick={() => {
-                                    deleteOrganization()
-                                }}
+                                onClick={deleteOrganization}
                             />
                             <Button
                                 label="Отмена"

@@ -11,12 +11,11 @@ const PersonTable = ({
                          onSelectionChange,
                          lazyState,
                          setLazyState,
-                         totalRecords,
-                         loadPeople
+                         totalRecords
                      }) => {
     const socket = useRef()
     useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:5050')
+        socket.current = new WebSocket('ws://127.0.0.1:8080/is_lab1-1.0-SNAPSHOT/webSocket')
 
         socket.current.onopen = () => {
             console.log('connected')

@@ -50,7 +50,7 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
         <form onSubmit={handleSubmitForm}>
             <div>
                 <label> Годовой оборот: </label>
-                <input type="number"
+                <input type="number" step="0.01"
                        value={formData.annualTurnover}
                        onChange={(e) => handleFieldChange("annualTurnover", e.target.value)}
                 />
@@ -71,7 +71,7 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
             </div>
             <div>
                 <label> Рейтинг: </label>
-                <input type="number"
+                <input type="number" step="0.01"
                        value={formData.rating}
                        onChange={(e) => handleFieldChange("rating", e.target.value)}
                 />

@@ -202,7 +202,6 @@ const PersonPage = () => {
                     lazyState = {lazyState}
                     setLazyState = {setLazyState}
                     totalRecords = {totalRecords}
-                    loadPeople = {loadPeople}
                 />
             </div>
         </div>
