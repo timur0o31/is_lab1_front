@@ -62,7 +62,7 @@ const OrganizationTable = ({
         }));
     };
     return (
-        <div>
+        <div className="table-wrapper">
             <DataTable
                 value={organizations}
                 lazy
@@ -86,6 +86,8 @@ const OrganizationTable = ({
                 onPage={onPage}
                 onSort={onSort}
                 onFilter={onFilter}
+                paginatorClassName="dt-paginator"
+                className="custom-table"
             >
                 <Column field="id" header="Id"/>
                 <Column

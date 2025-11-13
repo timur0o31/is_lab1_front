@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const personApi = axios.create({
-    baseURL: `app/api/person`,
+    baseURL: `app/api/persons`,
     headers: {
         'Content-Type': 'application/json'
     }
@@ -31,7 +31,7 @@ const Person = {
             }
         }
 
-        return personApi.get('/all', { params });
+        return personApi.get('/', { params });
     },
 
 

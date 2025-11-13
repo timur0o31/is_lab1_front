@@ -90,6 +90,11 @@ const WorkerPage = () => {
                 </ul>
             );
             showToast('error',data.error, errorList);
+            return;
+        }
+        if (data?.error){
+            showToast('error','Ошибка',data.error);
+            return;
         }
     }
     return (

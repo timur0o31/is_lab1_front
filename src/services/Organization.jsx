@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const organizationApi = axios.create({
-    baseURL: `app/api/organization`, // для helios ./is_lab1-1.0-SNAPSHOT/
+    baseURL: `app/api/organizations`, // для helios ./is_lab1-1.0-SNAPSHOT/
     headers: {
         'Content-Type': 'application/json'
     }
@@ -25,7 +25,7 @@ const Organization = {
             }
         }
 
-        return organizationApi.get('/all', { params });
+        return organizationApi.get('/', { params });
     },
     getOrganization(id) {
         return organizationApi.get(`/${id}`);

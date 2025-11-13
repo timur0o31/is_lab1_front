@@ -90,7 +90,7 @@ const PersonTable = ({
     };
 
     return (
-        <div>
+        <div className="table-wrapper">
             <DataTable
                 value={people}
                 dataKey="id"
@@ -102,7 +102,9 @@ const PersonTable = ({
                 totalRecords={totalRecords}
                 tableStyle={{ minWidth: "1000px", tableLayout: "fixed" }}
                 columnResizeMode="fit"
+                paginatorClassName="dt-paginator"
                 className="custom-table"
+                scrollHeight="flex"
                 onPage={onPage}
                 onSort={onSort}
                 onFilter={onFilter}

@@ -15,8 +15,3 @@ export default defineConfig({
   },
   plugins: [react()],
 })
-/*
-export default defineConfig({
-  base: './',
-  plugins: [react()],
-})*/

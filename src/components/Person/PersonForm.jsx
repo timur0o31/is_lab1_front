@@ -43,13 +43,14 @@ const PersonForm = ({ person, onSubmit, onCancel }) => {
     };
 
     const handleLocationChange = (field, val) => {
-        setFormData(prev => ({
-            ...prev,
-            location: {
-                ...(prev.location || { x: "", y: "", z: "" }),
-                [field]: val
-            }
-        }));
+        if (/^\d*$/.test(val)) {
+            setFormData(prev => ({
+                ...prev,
+                location: {
+                    ...(prev.location || {x: "", y: "", z: ""}), [field]: val
+                }
+            }));
+        }
     };
 
     const isLocationFilled = () => {
@@ -144,7 +145,7 @@ const PersonForm = ({ person, onSubmit, onCancel }) => {
                         <div>
                             <label>X:</label>
                             <input
-                                type="number"
+                                type="text"
                                 value={formData.location?.x ?? ""}
                                 onChange={(e) => handleLocationChange("x", e.target.value)}
                                 placeholder="Введите координату X"
@@ -154,7 +155,7 @@ const PersonForm = ({ person, onSubmit, onCancel }) => {
                         <div>
                             <label>Y:</label>
                             <input
-                                type="number"
+                                type="text"
                                 value={formData.location?.y ?? ""}
                                 onChange={(e) => handleLocationChange("y", e.target.value)}
                                 placeholder="Введите координату Y"
@@ -164,7 +165,7 @@ const PersonForm = ({ person, onSubmit, onCancel }) => {
                         <div>
                             <label>Z:</label>
                             <input
-                                type="number"
+                                type="text"
                                 value={formData.location?.z ?? ""}
                                 onChange={(e) => handleLocationChange("z", e.target.value)}
                                 placeholder="Введите координату Z"

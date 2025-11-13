@@ -8,7 +8,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
         name: '',
         coordinates: {x: 0, y: 0},
         organizationId: null,
-        salary: 0.0,
+        salary: 0.01,
         rating: 0,
         startDate: '',
         endDate: null,
@@ -25,7 +25,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
                 name: worker.name || '',
                 coordinates: worker.coordinates || {x:0, y:0},
                 organizationId: worker.organizationId || null,
-                salary: worker.salary || 0.0,
+                salary: worker.salary || 0.01,
                 rating: worker.rating || 0,
                 position: worker.position || null,
                 personId: worker.personId || null,
@@ -56,7 +56,27 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             console.error("Ошибка при загрузке информации о человеке:", e);
         }
     };
-    const handleFieldChange = (field, val) => setFormData(prev =>({...prev,[field]:val}))
+    const handleFieldChange = (field, val) => {
+        if (field === 'rating') {
+            if (/^-?\d*$/.test(val)) {
+                setFormData(prev => ({...prev, [field]: val}));
+            }
+        }else if (field === 'salary' ) {
+            const parsedValue = parseFloat(val);
+            if (val === '' || /^-?\d*\.?\d*$/.test(val)) {
+                setFormData(prev => ({...prev, [field]: val}));
+                if (val.trim() === '') {
+                    setErrors(prev => ({...prev, [field]: 'Поле не может быть пустым'}));
+                } else if (parsedValue < 0) {
+                    setErrors(prev => ({...prev, [field]: 'Значение не может быть отрицательным'}));
+                } else {
+                    setErrors(prev => ({...prev, [field]: ''}));
+                }
+            }
+        } else {
+            setFormData(prev => ({...prev, [field]: val}));
+        }
+    }
     const handleCoordinatesChange = (field, val) => {
         setFormData(prev => ({
             ...prev,
@@ -114,15 +134,17 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             </div>
             <div>
                 <label> зарплата </label>
-                <input type="number" step ="any"
+                <input type="text"
+                       placeholder = "Введите число"
                        value={formData.salary}
                        onChange={(e) => handleFieldChange("salary", e.target.value)}
                 />
             </div>
             <div>
                 <label> Рейтинг </label>
-                <input type="number"
-                       value={formData.rating}
+                <input type="text"
+                       placeholder="Введите число"
+                       value={formData?.rating || ""}
                        onChange={(e) => handleFieldChange("rating", e.target.value)}
                 />
             </div>

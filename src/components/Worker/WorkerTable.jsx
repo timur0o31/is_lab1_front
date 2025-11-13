@@ -77,7 +77,7 @@ const WorkerTable = ({
     }
 
     return (
-        <div>
+        <div className="table-wrapper">
             <DataTable
                 value={workers}
                 lazy

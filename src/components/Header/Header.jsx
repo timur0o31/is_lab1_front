@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Menubar } from 'primereact/menubar';
-import './Header.css';
+import '../../App.css';
 const Header = () => {
     const links = [
         {label: 'Работники', path:'/'},

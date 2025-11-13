@@ -2,38 +2,51 @@ import {useEffect, useState} from "react";
 import "../../App.css"
 const OrganizationForm = ({organization, onSubmit,onCancel}) => {
     const [formData,setFormData] = useState({
-        officialAddress: {street: '', zipCode: ''},
-        annualTurnover: 0.0,
-        employeesCount: 0,
-        fullName: '',
-        rating: 0.0,
-        postalAddress: {street: '', zipCode: ''}
+        officialAddress: {street: null, zipCode: ''},
+        annualTurnover: null,
+        employeesCount: null,
+        fullName: null,
+        rating: null,
+        postalAddress: {street: null, zipCode: ''}
     })
+    const [errors, setErrors] = useState({})
     const [showOfficialAddress, setShowOfficialAddress] = useState(false);
     const [showPostalAddress, setShowPostalAddress] = useState(false);
     useEffect (() => {
         if (organization) {
             setFormData({
                 officialAddress: {
-                    street: organization.officialAddress?.street ?? '',
-                    zipCode: organization.officialAddress?.zipCode ?? ''
+                    street: organization.officialAddress?.street || null,
+                    zipCode: organization.officialAddress?.zipCode || ''
                 },
                 postalAddress: {
-                    street: organization.postalAddress?.street ?? '',
+                    street: organization.postalAddress?.street || null,
                     zipCode: organization.postalAddress?.zipCode ?? ''
                 },
-                annualTurnover: organization.annualTurnover ?? 0,
-                employeesCount: organization.employeesCount ?? 0,
-                fullName: organization.fullName ?? '',
-                rating: organization.rating ?? 0
+                annualTurnover: organization.annualTurnover || null,
+                employeesCount: organization.employeesCount || null,
+                fullName: organization.fullName || null,
+                rating: organization.rating || 0
             });
         }
     }, [organization]);
     const handleSubmitForm = (e) => {
         e.preventDefault()
-        onSubmit(formData)
+        onSubmit(formData);
     }
-    const handleFieldChange = (field, val) => setFormData(prev =>({...prev,[field]:val}))
+    const handleFieldChange = (field, val) => {
+        if (field === 'employeesCount') {
+            if (/^\d*$/.test(val)) {
+                setFormData(prev => ({...prev, [field]: val}));
+            }
+        }else if (field === 'annualTurnover' || field === 'rating') {
+            if (val === '' || /^-?\d*\.?\d*$/.test(val)) {
+                setFormData(prev => ({...prev, [field]: val}));
+            }
+        } else {
+            setFormData(prev => ({...prev, [field]: val}));
+        }
+    }
     const handleOfficialAddressChange = (field, val) => {
         setFormData(prev => ({
             ...prev,
@@ -50,14 +63,14 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
         <form onSubmit={handleSubmitForm}>
             <div>
                 <label> Годовой оборот: </label>
-                <input type="number" step="0.01"
+                <input type="text" placeholder="Введите число"
                        value={formData.annualTurnover}
                        onChange={(e) => handleFieldChange("annualTurnover", e.target.value)}
                 />
             </div>
             <div>
                 <label> Количество работников: </label>
-                <input type="number"
+                <input type="text" placeholder="Введите целое число"
                        value={formData.employeesCount}
                        onChange={(e) => handleFieldChange("employeesCount", e.target.value)}
                 />
@@ -71,7 +84,7 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
             </div>
             <div>
                 <label> Рейтинг: </label>
-                <input type="number" step="0.01"
+                <input type="text" placeholder="Введите число"
                        value={formData.rating}
                        onChange={(e) => handleFieldChange("rating", e.target.value)}
                 />
@@ -139,7 +152,6 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
 
                     <button type="submit">Сохранить</button>
                     <button type="button" onClick={onCancel}>Отмена</button>
-
         </form>
 
 )

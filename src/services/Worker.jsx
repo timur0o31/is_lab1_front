@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const workerApi = axios.create({
-    baseURL: `app/api/worker`, // для локалки надо опять прописать app
+    baseURL: `app/api/workers`, // для локалки надо опять прописать app
     headers: {
         'Content-Type': 'application/json'
     }
@@ -33,7 +33,7 @@ const Worker = {
             }
         }
 
-        return workerApi.get('/all', { params });
+        return workerApi.get('/', { params });
     },
 
     getWorker(id) {
