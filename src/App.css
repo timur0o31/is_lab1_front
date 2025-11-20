@@ -195,11 +195,46 @@ button:focus-visible {
   display: flex ;
   flex-direction: column ;
   align-items: flex-start ;
+  position: relative ;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .p-toast-message-error {
   background: #edd5d5;
   color: #050505;
+}
+.p-toast-message-error .p-toast-message-icon {
+  display: none;
+}
+.p-toast-message-error .p-toast-message-content {
+  padding-left: 0;
+}
+.p-toast-message-success {
+  background: #e7f6ec;
+  color: #14532d;
+  border-left: 4px solid #22c55e;
+}
+.p-toast-message-success .p-toast-message-icon {
+  color: #16a34a;
+}
+.p-toast .p-toast-icon-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0.25rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+.p-toast .p-toast-icon-close:hover {
+  color: #111827;
+}
+.p-toast .p-toast-icon-close:focus,
+.p-toast .p-toast-icon-close:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 .p-toast-detail {
   white-space: pre-line ;

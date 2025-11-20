@@ -212,14 +212,14 @@ const OrganizationListPage = () => {
                         <p>Вы уверены, что хотите удалить <strong>{selectedOrganization.fullName}</strong>?</p>
                         <div style={{marginTop: "1.5rem", display: "flex", justifyContent: "center", gap: "1rem"}}>
                             <Button
-                                label="Удалить"
-                                severity="danger"
-                                onClick={deleteOrganization}
-                            />
-                            <Button
                                 label="Отмена"
                                 outlined
                                 onClick={() => setDeleteDialogVisible(false)}
+                            />
+                            <Button
+                                label="Удалить"
+                                severity="danger"
+                                onClick={deleteOrganization}
                             />
                         </div>
                     </div>
@@ -242,7 +242,7 @@ const OrganizationListPage = () => {
 
                         {availableOrgs.length === 0 ? (
                             <p style={{ marginTop: '1rem' }}>
-                                Нет доступных организаций для перевода. Сначала создайте другую организацию или освободите сотрудников.
+                                Нет доступных организаций для перевода. Сначала создайте другую организацию и переведите туда рабочих, или сначала увольте всех сотрудников из организации, а затем удалите её.
                             </p>
                         ) : (
                             <Dropdown

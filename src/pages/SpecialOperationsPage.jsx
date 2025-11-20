@@ -22,7 +22,7 @@ const SpecialOperationsWorkerPage = () => {
     const [workers, setWorkers] = useState([]);
     const [result, setResult] = useState("");
     const [errors, setErrors] = useState({});
-    const [orgId, setOrgId] = useState(0);
+    const [orgId, setOrgId] = useState(null);
 
     const [organizations, setOrganizations] = useState([]);
     const [organizationTotal, setOrganizationTotal] = useState(0);
@@ -36,6 +36,8 @@ const SpecialOperationsWorkerPage = () => {
         setErrors({});
     };
     const [flag,setFlag] = useState(false);
+    const [pageState, setPageState] = useState({first:0,rows:10})
+    const onPage = (e) => setPageState({first:e.first, rows:e.rows})
     const handleLazyLoadOrganizations = async (e = { first: 0, rows: 10 }) => {
         try {
             const lazyState = {
@@ -53,17 +55,13 @@ const SpecialOperationsWorkerPage = () => {
             console.error("Ошибка при загрузке организаций:", err);
         }
     };
-    const resetAllFields = () => {
-        setPrefix("");
-        setEndDate(null);
-
-        setWorkerIdToHire(null);
-        setWorkerIdToFire(null);
+    const resetHireSelection = () => {
         setSelectedOrganizationId(null);
+        setWorkerIdToHire(null);
+    };
+    const resetFireSelection = () => {
         setOrgId(null);
-        setWorkers([]);
-        setFlag(false);
-        setErrors({});
+        setWorkerIdToFire(null);
     };
     const handleLoadWorkers = async () => {
         if (!orgId) return;
@@ -93,13 +91,24 @@ const SpecialOperationsWorkerPage = () => {
     const handleSuccess = (msg) => {
         toast.current.show({ severity: "success", summary: "Успех", detail: msg });
     };
-
+    const resetAllFields = () => {
+        setPrefix("");
+        setEndDate(null);
+        setWorkers([]);
+        setResult("");
+        setErrors({});
+        setFlag(false);
+        setWorkerIdToHire(null);
+        setWorkerIdToFire(null);
+        setSelectedOrganizationId(null);
+        setOrgId(null);
+    };
     const handleSumRating = async () => {
         resetState();
+        setFlag(false);
         try {
             const res = await WorkerService.getSumRating();
             setResult(`Сумма всех rating: ${res.data}`);
-            console.log("Сумма всех rating: "+ res.data);
         } catch {
             handleError("Не удалось вычислить сумму рейтингов");
         }
@@ -122,12 +131,16 @@ const SpecialOperationsWorkerPage = () => {
     };
 
     const handleFindByEndDate = async () => {
+        if (errors.endDate) {
+            handleError(errors.endDate);
+            return;
+        }
         if (!endDate) {
             setErrors({ endDate: "Выберите дату" });
             handleError("Поле для даты не может быть пустым");
             return;
         }
-        if (value instanceof Date && isNaN(value.getTime())) {
+        if (endDate instanceof Date && isNaN(endDate.getTime())) {
             setErrors({ endDate: "Неверный формат даты" });
             handleError("Введите дату в корректном формате (yy-mm-dd)");
             return false;
@@ -161,7 +174,7 @@ const SpecialOperationsWorkerPage = () => {
     };
 
     const handleFireWorker = async () => {
-        if (!workerIdToFire || !selectedOrganizationId) {
+        if (!workerIdToFire || !orgId) {
             handleError("Чтобы уволить, нужно выбрать и работника, и организацию");
             return;
         }
@@ -211,7 +224,7 @@ const SpecialOperationsWorkerPage = () => {
                     <Calendar
                         value={endDate}
                         onChange={(e) => {
-                            const raw = e.target.value;
+                            const raw = e.originalEvent?.target?.value;
                             const parsed = e.value;
                              setErrors({});
                              if (raw && !parsed) {
@@ -250,7 +263,10 @@ const SpecialOperationsWorkerPage = () => {
                     <Dropdown
                         value={selectedOrganizationId}
                         options={organizations}
-                        onChange={(e) => setSelectedOrganizationId(e.value)}
+                        onChange={(e) => {
+                            setSelectedOrganizationId(e.value);
+                            resetFireSelection();
+                        }}
                         optionLabel="fullName"
                         optionValue="id"
                         placeholder="Выберите организацию"
@@ -276,7 +292,10 @@ const SpecialOperationsWorkerPage = () => {
                     <Dropdown
                         value={orgId}
                         options={organizations}
-                        onChange={(e) => setOrgId(e.value)}
+                        onChange={(e) => {
+                            setOrgId(e.value)
+                            resetHireSelection();
+                    }}
                         optionLabel="fullName"
                         optionValue="id"
                         placeholder="Выберите организацию"
@@ -292,7 +311,9 @@ const SpecialOperationsWorkerPage = () => {
                     <Dropdown
                         value={workerIdToFire}
                         options={workers}
-                        onChange={(e) => setWorkerIdToFire(e.value)}
+                        onChange={(e) =>
+                            setWorkerIdToFire(e.value)
+                        }
                         optionLabel="name"
                         optionValue="id"
                         placeholder="Выберите активного рабочего"
@@ -319,7 +340,16 @@ const SpecialOperationsWorkerPage = () => {
             </Card>
             {flag && (
                 <Card title="Результаты поиска работников" className="flex-container">
-                    <DataTable value={workers} paginator rows={5} emptyMessage="Нет данных">
+                    <DataTable
+                        value={workers}
+                        paginator
+                        rows={pageState.rows}
+                        first={pageState.first}
+                        totalRecords={workers.length}
+                        onPage={onPage}
+                        rowsPerPageOptions={[5, 10, 20]}
+                        emptyMessage="Нет данных"
+                    >
                         <Column field="id" header="ID" />
                         <Column field="name" header="Имя" />
                         <Column field="rating" header="Рейтинг" />
