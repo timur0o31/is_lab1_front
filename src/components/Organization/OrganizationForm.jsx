@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {InputText} from "primereact/inputtext"
 import "../../App.css"
 const OrganizationForm = ({organization, onSubmit,onCancel}) => {
     const [formData,setFormData] = useState({
@@ -36,8 +37,8 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
     }
     const handleFieldChange = (field, val) => {
         if (field === 'employeesCount') {
-            if (/^\d*$/.test(val)) {
-                setFormData(prev => ({...prev, [field]: val}));
+            if (val === '' || /^\d+$/.test(val)) {
+                setFormData(prev => ({ ...prev, [field]: val }));
             }
         }else if (field === 'annualTurnover' || field === 'rating') {
             if (val === '' || /^-?\d*\.?\d*$/.test(val)) {
@@ -46,6 +47,16 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
         } else {
             setFormData(prev => ({...prev, [field]: val}));
         }
+    }
+    const handleFirstInputChange = (char, currentValue) => {
+        if (/[0-9]/.test(char)) return true;
+        if (char === "-") return currentValue.length === 0;
+        if (char === ".") {
+            if (currentValue.length === 0) return false;
+            if (currentValue === "-") return false;
+            return !currentValue.includes(".");
+        }
+        return false;
     }
     const handleOfficialAddressChange = (field, val) => {
         setFormData(prev => ({
@@ -63,36 +74,54 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
         <form onSubmit={handleSubmitForm}>
             <div>
                 <label> Годовой оборот: </label>
-                <input type="text" placeholder="Введите число"
-                       value={formData.annualTurnover}
-                       onChange={(e) => handleFieldChange("annualTurnover", e.target.value)}
+                <InputText
+                    placeholder="Введите число"
+                    value={formData.annualTurnover}
+                    onBeforeInput={(e) => {
+                        if (!handleFirstInputChange(e.data,e.target.value)) {
+                            e.preventDefault();
+                        }
+                    }}
+                    onChange={(e) => handleFieldChange("annualTurnover", e.target.value)}
                 />
             </div>
             <div>
                 <label> Количество работников: </label>
-                <input type="text" placeholder="Введите целое число"
-                       value={formData.employeesCount}
-                       onChange={(e) => handleFieldChange("employeesCount", e.target.value)}
+                <InputText
+                    placeholder="Введите целое число"
+                    value={formData.employeesCount}
+                    onChange={(e) => handleFieldChange("employeesCount", e.target.value)}
+                    onBeforeInput={(e) => {
+                        if (!/[0-9]/.test(e.data)) {
+                            e.preventDefault();
+                        }
+                    }}
                 />
             </div>
             <div>
                 <label> Полное название: </label>
-                <input type="text"
+                <InputText
                        value={formData.fullName}
                        onChange={(e) => handleFieldChange("fullName", e.target.value)}
                 />
             </div>
             <div>
                 <label> Рейтинг: </label>
-                <input type="text" placeholder="Введите число"
-                       value={formData.rating}
-                       onChange={(e) => handleFieldChange("rating", e.target.value)}
+                <InputText
+                    placeholder="Введите число"
+                    onBeforeInput={(e) => {
+                        if (!handleFirstInputChange(e.data,e.target.value)) {
+                            e.preventDefault();
+                        }
+                    }}
+                    value={formData.rating}
+                    onChange={(e) => handleFieldChange("rating", e.target.value)}
                 />
             </div>
             <div className="section-container">
                 <div className="section-block">
                     <div className="section-header">
-                        <h3>Официальный сайт</h3>
+                        <h3>Официальный адрес</h3>
                         <button
                             type="button"
                             onClick={() => setShowOfficialAddress((prev) => !prev)}

@@ -165,11 +165,13 @@ const OrganizationListPage = () => {
                 </ul>
             );
             showToast('error',data.error, errorList);
+        }else{
+            showToast('error',data.error,data.data);
         }
     }
 
     return (
-        <div>
+        <div className="page">
             <Toast ref={toast} />
             <ConfirmDialog />
 
@@ -250,7 +252,8 @@ const OrganizationListPage = () => {
                                 optionLabel="fullName"
                                 optionValue="id"
                                 placeholder="Выберите новую организацию"
-                                style={{ width: '100%', marginTop: '1rem' }}
+                                className="dropDownBox"
+                                panelClassName="dropDownPanel"
                             />
                         )}
 

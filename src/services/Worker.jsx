@@ -80,7 +80,7 @@ const Worker = {
         return workerApi.get(`/by-organization/${orgId}`)
     },
     fireWorker(workerId) {
-        return workerApi.put(`/fire/${workerId}`);
+        return workerApi.put(`/${workerId}/fire/`);
     },
     getUnemployedPeople(){
         return workerApi.get(`/unemployed`)

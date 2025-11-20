@@ -12,7 +12,7 @@ const OrganizationTable = ({
                            }) => {
     const socket = useRef()
     useEffect(() => {
-        socket.current = new WebSocket('ws://127.0.0.1:8080/is_lab1-1.0-SNAPSHOT/webSocket')
+        socket.current = new WebSocket('ws/webSocket')
         socket.current.onopen = () => {
             console.log('connected')
         }
@@ -81,6 +81,8 @@ const OrganizationTable = ({
                 rowClassName={(rowData) =>
                     rowData.id === selection?.id ? "selected-row" : ""
                 }
+                scrollable
+                scrollHeight="70vh"
                 first={lazyState.first}
                 totalRecords={totalRecords}
                 onPage={onPage}

@@ -11,6 +11,12 @@ export default defineConfig({
         rewrite: (path) =>
             path.replace(/^\/app/, ""),
       },
+      "/ws":{
+        target:"ws://127.0.0.1:8080/is_lab1-1.0-SNAPSHOT",
+        ws:true,
+        changeOrigin:true,
+        rewrite: path => path.replace(/^\/ws/, "")
+      }
     },
   },
   plugins: [react()],

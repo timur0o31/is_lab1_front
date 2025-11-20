@@ -87,7 +87,7 @@ const WorkerTable = ({
                 removableSort
                 paginator
                 rows={lazyState.rows}
-                rowsPerPageOptions={[5, 10, 25, 50]}
+                rowsPerPageOptions={[5, 10, 20]}
                 filterDisplay="row"
                 emptyMessage="Работники не найдены"
                 selectionMode="single"

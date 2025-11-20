@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {POSITION} from "../../enums/enums.js";
 import {Dropdown} from "primereact/dropdown";
+import {InputText} from "primereact/inputtext"
 import Person from "../../services/Person.jsx";
 import Organization from "../../services/Organization.jsx";
 const WorkerForm = ({worker, onSubmit,onCancel}) => {
@@ -61,7 +62,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             if (/^-?\d*$/.test(val)) {
                 setFormData(prev => ({...prev, [field]: val}));
             }
-        }else if (field === 'salary' ) {
+        }else if (field === 'salary'  ) {
             const parsedValue = parseFloat(val);
             if (val === '' || /^-?\d*\.?\d*$/.test(val)) {
                 setFormData(prev => ({...prev, [field]: val}));
@@ -127,14 +128,14 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
         <form onSubmit={handleSubmitForm}>
             <div>
                 <label> Имя </label>
-                <input type="text"
+                <InputText type="text"
                        value={formData.name}
                        onChange={(e) => handleFieldChange("name", e.target.value)}
                 />
             </div>
             <div>
                 <label> зарплата </label>
-                <input type="text"
+                <InputText type="text"
                        placeholder = "Введите число"
                        value={formData.salary}
                        onChange={(e) => handleFieldChange("salary", e.target.value)}
@@ -142,7 +143,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             </div>
             <div>
                 <label> Рейтинг </label>
-                <input type="text"
+                <InputText type="text"
                        placeholder="Введите число"
                        value={formData?.rating || ""}
                        onChange={(e) => handleFieldChange("rating", e.target.value)}
@@ -163,7 +164,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
                 </select>
             </div>
             <div>
-                <label>Дата начала работы *</label>
+                <label>Дата начала работы </label>
                 <input
                     type="datetime-local"
                     value={formData.startDate}

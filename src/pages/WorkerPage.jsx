@@ -93,12 +93,12 @@ const WorkerPage = () => {
             return;
         }
         if (data?.error){
-            showToast('error','Ошибка',data.error);
+            showToast('error',data.error,data.data);
             return;
         }
     }
     return (
-        <div>
+        <div className="page">
             <Toast ref={toast} />
             <ConfirmDialog />
 

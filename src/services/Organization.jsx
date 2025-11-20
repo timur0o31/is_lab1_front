@@ -13,8 +13,11 @@ const Organization = {
         params.append('page', Math.floor(lazyState.first/lazyState.rows)+1);
         params.append('size', lazyState.rows);
         if (lazyState.sortField) {
-            const sortDirection = lazyState.sortOrder === 1 ? 'asc' : 'desc';
-            params.append('sort', `${lazyState.sortField},${sortDirection}`);
+            params.append('sortColumn', lazyState.sortField);
+            params.append('asc', lazyState.sortOrder === 1);
+        }else{
+            params.append('sortColumn', 'id');
+            params.append('asc', true);
         }
         if (lazyState.filters) {
             for (const [field, filter] of Object.entries(lazyState.filters)) {

@@ -15,7 +15,7 @@ const PersonTable = ({
                      }) => {
     const socket = useRef()
     useEffect(() => {
-        socket.current = new WebSocket('ws://127.0.0.1:8080/is_lab1-1.0-SNAPSHOT/webSocket')
+        socket.current = new WebSocket('ws/webSocket')
 
         socket.current.onopen = () => {
             console.log('connected')
@@ -102,9 +102,9 @@ const PersonTable = ({
                 totalRecords={totalRecords}
                 tableStyle={{ minWidth: "1000px", tableLayout: "fixed" }}
                 columnResizeMode="fit"
-                paginatorClassName="dt-paginator"
                 className="custom-table"
-                scrollHeight="flex"
+                scrollable
+                scrollHeight="70vh"
                 onPage={onPage}
                 onSort={onSort}
                 onFilter={onFilter}

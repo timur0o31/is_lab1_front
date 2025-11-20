@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'primereact/button';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { ConfirmDialog} from 'primereact/confirmdialog';
+import { Card } from 'primereact/card';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
 import PersonTable from '../components/Person/PersonTable.jsx';
@@ -115,7 +116,7 @@ const PersonPage = () => {
     }
 
     return (
-        <div>
+        <div className="page">
             <Toast ref={toast}/>
             <ConfirmDialog/>
 
@@ -175,8 +176,7 @@ const PersonPage = () => {
                     </div>
                 )}
             </Dialog>
-            <div>
-                <h3>Список Людей</h3>
+            <Card title="Список Людей">
                 <div>
                     <Button
                         label="Создать"
@@ -203,7 +203,7 @@ const PersonPage = () => {
                     setLazyState = {setLazyState}
                     totalRecords = {totalRecords}
                 />
-            </div>
+            </Card>
         </div>
     );
 };

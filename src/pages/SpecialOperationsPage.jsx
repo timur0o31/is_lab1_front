@@ -53,7 +53,20 @@ const SpecialOperationsWorkerPage = () => {
             console.error("Ошибка при загрузке организаций:", err);
         }
     };
+    const resetAllFields = () => {
+        setPrefix("");
+        setEndDate(null);
+
+        setWorkerIdToHire(null);
+        setWorkerIdToFire(null);
+        setSelectedOrganizationId(null);
+        setOrgId(null);
+        setWorkers([]);
+        setFlag(false);
+        setErrors({});
+    };
     const handleLoadWorkers = async () => {
+        if (!orgId) return;
         resetState();
         setFlag(false);
         try {
@@ -95,6 +108,7 @@ const SpecialOperationsWorkerPage = () => {
     const handleFindByPrefix = async () => {
         if (!prefix.trim()) {
             setErrors({ prefix: "Введите подстроку" });
+            handleError("Поле для подстроки не может быть пустым");
             return;
         }
         resetState();
@@ -110,7 +124,13 @@ const SpecialOperationsWorkerPage = () => {
     const handleFindByEndDate = async () => {
         if (!endDate) {
             setErrors({ endDate: "Выберите дату" });
+            handleError("Поле для даты не может быть пустым");
             return;
+        }
+        if (value instanceof Date && isNaN(value.getTime())) {
+            setErrors({ endDate: "Неверный формат даты" });
+            handleError("Введите дату в корректном формате (yy-mm-dd)");
+            return false;
         }
         resetState();
         try {
@@ -123,8 +143,8 @@ const SpecialOperationsWorkerPage = () => {
     };
 
     const handleHireWorker = async () => {
-        if (!workerIdToHire) {
-            setErrors({ hire: "Выберите безработного" });
+        if (!workerIdToHire || !selectedOrganizationId) {
+            handleError("Чтобы принять на работу, нужно выбрать и безработного, и организацию");
             return;
         }
         resetState();
@@ -134,14 +154,15 @@ const SpecialOperationsWorkerPage = () => {
             handleSuccess(
                 `Рабочий #${id} принят в организацию #${selectedOrganizationId}`
             );
+            resetAllFields();
         } catch {
             handleError("Не удалось принять сотрудника");
         }
     };
 
     const handleFireWorker = async () => {
-        if (!workerIdToFire) {
-            setErrors({ fire: "Введите ID работника" });
+        if (!workerIdToFire || !selectedOrganizationId) {
+            handleError("Чтобы уволить, нужно выбрать и работника, и организацию");
             return;
         }
         resetState();
@@ -149,14 +170,21 @@ const SpecialOperationsWorkerPage = () => {
             let id = Number(workerIdToFire)
             await WorkerService.fireWorker(id);
             handleSuccess(`Работник #${workerIdToFire} уволен`);
+            resetAllFields();
         } catch {
             handleError("Не удалось уволить работника");
         }
     };
-
+    const handlePrefixChange = (e) => {
+        setPrefix(e.target.value);
+        setEndDate(null);
+        setWorkers([]);
+        setFlag(false);
+        setErrors({});
+    }
 
     return (
-        <div>
+        <div className="page">
             <Toast ref={toast} />
             <Card title="Специальные операции с работниками" className="flex-container">
 
@@ -172,17 +200,27 @@ const SpecialOperationsWorkerPage = () => {
                     <label>Имя начинается с:</label>
                     <InputText
                         value={prefix}
-                        onChange={(e) => setPrefix(e.target.value)}
+                        onChange = {handlePrefixChange}
                         className={classNames({ "p-invalid": errors.prefix })}
                     />
                     <Button label="Найти работников" onClick={handleFindByPrefix} className="mt-2" />
                 </div>
 
                 <div className="mb-4">
-                    <label>Дата окончания после:</label>
+                    <label>Дата окончания работы после определенного дня: </label>
                     <Calendar
                         value={endDate}
-                        onChange={(e) => setEndDate(e.value)}
+                        onChange={(e) => {
+                            const raw = e.target.value;
+                            const parsed = e.value;
+                             setErrors({});
+                             if (raw && !parsed) {
+                                setErrors({ endDate: "Неверный формат даты" });
+                                setEndDate(null);
+                                return;
+                            }
+                            setEndDate(parsed);
+                        }}
                         dateFormat="yy-mm-dd"
                         className={classNames({ "p-invalid": errors.endDate })}
                     />
@@ -234,7 +272,7 @@ const SpecialOperationsWorkerPage = () => {
                 </div>
 
                 <div>
-                    <label>Организация </label>
+                    <h4>Уволить сотрудника из организации</h4>
                     <Dropdown
                         value={orgId}
                         options={organizations}
@@ -247,10 +285,10 @@ const SpecialOperationsWorkerPage = () => {
                         virtualScrollerOptions={{
                             itemSize: 38,
                             lazy: true,
-                            onLazyLoad: handleLazyLoadOrganizations
+                            onLazyLoad: handleLazyLoadOrganizations,
+                            options: { totalRecords: organizationTotal }
                         }}
                     />
-                    <label>ID сотрудника для увольнения:</label>
                     <Dropdown
                         value={workerIdToFire}
                         options={workers}
@@ -279,7 +317,7 @@ const SpecialOperationsWorkerPage = () => {
                     </Card>
                 )}
             </Card>
-            {workers.length > 0 &&  flag && (
+            {flag && (
                 <Card title="Результаты поиска работников" className="flex-container">
                     <DataTable value={workers} paginator rows={5} emptyMessage="Нет данных">
                         <Column field="id" header="ID" />
