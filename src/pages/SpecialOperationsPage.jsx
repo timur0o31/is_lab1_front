@@ -251,13 +251,11 @@ const SpecialOperationsWorkerPage = () => {
                         optionValue="id"
                         className="dropDownBox"
                         panelClassName="dropDownPanel"
+                        emptyMessage="Пока что нет безработных людей"
                         placeholder="Выберите безработного"
                         style={{ width: "100%" }}
-                        virtualScrollerOptions={{
-                            itemSize: 38,
-                            lazy: true,
-                            onLazyLoad: handleLoadUnemployed
-                        }}
+                        onShow={handleLoadUnemployed}
+
                     />
 
                     <Dropdown
@@ -316,14 +314,12 @@ const SpecialOperationsWorkerPage = () => {
                         }
                         optionLabel="name"
                         optionValue="id"
-                        placeholder="Выберите активного рабочего"
+                        placeholder={orgId ? "Выберите активного работника" : "Сначала выберите организацию"}
+                        disabled={!orgId}
                         className="dropDownBox"
+                        emptyMessage="В данной организации нет активных рабочих"
                         panelClassName="dropDownPanel"
-                        virtualScrollerOptions={{
-                            itemSize: 38,
-                            lazy: true,
-                            onLazyLoad: handleLoadWorkers
-                        }}
+                        onShow={handleLoadWorkers}
                     />
                     <Button
                         label="Уволить сотрудника"

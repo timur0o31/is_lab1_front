@@ -103,7 +103,15 @@ const WorkerTable = ({
                 onSort={onSort}
                 onFilter={onFilter}
             >
-                <Column field="id" header="Id"/>
+                <Column
+                    field="id"
+                    header="Id"
+                    sortable
+                    filter
+                    filterMatchMode="gte"
+                    dataType="numeric"
+                    showFilterMenu={false}
+                />
                 <Column
                     field="name"
                     header="Имя"

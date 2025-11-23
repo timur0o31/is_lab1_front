@@ -30,9 +30,11 @@ const PersonPage = () => {
             setPeople(response.data.content);
             setTotalRecords(response.data.totalRecords);
         } catch (error) {
-            console.error('Ошибка загрузки:', error);
-            showToast('error', 'Ошибка', 'Не удалось загрузить данные');
-            setTotalRecords(0);
+            if (error.response.status === 500) {
+                showToast('error', 'Ошибка', 'Сервер не отвечает');
+                return;
+            }
+            handleError(error);
         }
     };
     useEffect(() => {
@@ -52,8 +54,9 @@ const PersonPage = () => {
 
     const onEditSubmit = async (data) => {
         try {
-            await PersonService.updatePerson(selectPerson.id, data);
+            const {data: updated} = await PersonService.updatePerson(selectPerson.id, data);
             setEditDialogVisible(false);
+            setSelectPerson(updated);
             loadPeople();
             showToast('success', 'Успех', 'Данные персонажа обновлены');
         } catch (error) {
@@ -112,6 +115,10 @@ const PersonPage = () => {
                 </ul>
             );
             showToast('error',data.error, errorList);
+        }
+        if (data?.error){
+            showToast('error',data.error,data.data);
+            return;
         }
     }
 

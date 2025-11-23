@@ -43,6 +43,11 @@ const OrganizationListPage = () => {
             setOrganizations(response.data.content);
             setTotalRecords(response.data.totalRecords);
         } catch (error) {
+            if (error.response.status === 500) {
+                showToast('error', 'Ошибка', 'Сервер не отвечает');
+                return;
+            }
+            handleError(error);
             toast.current.show({
                 severity: 'error',
                 summary: 'Ошибка',
@@ -102,14 +107,11 @@ const OrganizationListPage = () => {
 
     const onEditSuccess = async (data) => {
         try {
-            await OrganizationService.updateOrganization(selectedOrganization.id, data);
+            const {data: updated} = await OrganizationService.updateOrganization(selectedOrganization.id, data);
             setEditDialogVisible(false);
             loadOrganizations();
-            showToast(
-                'success',
-                'Успех',
-                   'Организация обновлена'
-            );
+            setSelectedOrganization(updated);
+            showToast('success', 'Успех', 'Организация обновлена');
         } catch (error) {
             handleError(error);
         }

@@ -47,7 +47,8 @@ const PersonForm = ({ person, onSubmit, onCancel }) => {
             setFormData(prev => ({
                 ...prev,
                 location: {
-                    ...(prev.location || {x: "", y: "", z: ""}), [field]: val
+                    ...(prev.location || {x: null, y: null, z: null}),
+                    [field]: val.trim() === "" ? null : val
                 }
             }));
         }

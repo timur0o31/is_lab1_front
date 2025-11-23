@@ -120,8 +120,14 @@ const PersonTable = ({
                     rowData.id === selection?.id ? "selected-row" : ""
                 }
             >
-                <Column field="id" header="Id"
-
+                <Column
+                        field="id"
+                        header="Id"
+                        sortable
+                        filter
+                        filterMatchMode="gte"
+                        dataType="numeric"
+                        showFilterMenu={false}
                         style={{ width: "200px" }}
                         headerStyle={{ width: "100px",textAlign:"center" }}
                 />
@@ -130,7 +136,6 @@ const PersonTable = ({
                     header="Passport Id"
                     sortable
                     filter
-                    filterPlaceholder = "Поиск по ID"
                     filterMatchMode="contains"
                     showFilterMenu={false}
                 />

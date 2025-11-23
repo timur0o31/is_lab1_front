@@ -20,6 +20,11 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
     const [showCoordinates, setShowCoordinates] = useState(false);
     const [persons, setPersons] = useState([])
     const [organizations, setOrganizations] = useState([])
+    const nullIfEmpty = (v) => (v === "" ? null : v);
+    const normalizeFormData = (data) => ({
+        ...data,
+        salary: nullIfEmpty(data.salary),
+    });
     useEffect (() => {
         if (worker){
             setFormData({
@@ -39,7 +44,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
     }, [worker])
     const handleSubmitForm = (e) => {
         e.preventDefault()
-        onSubmit(formData)
+        onSubmit(normalizeFormData(formData))
     }
     const loadPersonInfo = async (id) => {
         try {
@@ -57,34 +62,29 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
             console.error("Ошибка при загрузке информации о человеке:", e);
         }
     };
-    const handleFieldChange = (field, val) => {
+    const handleFieldNumChange = (field, val) => {
         if (field === 'rating') {
             if (/^-?\d*$/.test(val)) {
                 setFormData(prev => ({...prev, [field]: val}));
             }
+            return;
         }else if (field === 'salary'  ) {
             const parsedValue = parseFloat(val);
             if (val === '' || /^-?\d*\.?\d*$/.test(val)) {
                 setFormData(prev => ({...prev, [field]: val}));
-                if (val.trim() === '') {
-                    setErrors(prev => ({...prev, [field]: 'Поле не может быть пустым'}));
-                } else if (parsedValue < 0) {
-                    setErrors(prev => ({...prev, [field]: 'Значение не может быть отрицательным'}));
-                } else {
-                    setErrors(prev => ({...prev, [field]: ''}));
-                }
             }
-        } else {
-            setFormData(prev => ({...prev, [field]: val}));
+            return;
         }
     }
+    const handleFieldChange = (field, val) => {
+        setFormData(prev => ({ ...prev, [field]: val }));
+    };
     const handleCoordinatesChange = (field, val) => {
         setFormData(prev => ({
             ...prev,
             coordinates: {...prev.coordinates, [field]: val}
         }))
     }
-
     const [personTotal, setPersonTotal] = useState(0);
     const [organizationTotal,setOrganizationTotal] = useState(0);
     const handleLazyLoadPersons = async (e = { first: 0, rows: 10 }) => {
@@ -138,7 +138,7 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
                 <InputText type="text"
                        placeholder = "Введите число"
                        value={formData.salary}
-                       onChange={(e) => handleFieldChange("salary", e.target.value)}
+                       onChange={(e) => handleFieldNumChange("salary", e.target.value)}
                 />
             </div>
             <div>
@@ -146,13 +146,13 @@ const WorkerForm = ({worker, onSubmit,onCancel}) => {
                 <InputText type="text"
                        placeholder="Введите число"
                        value={formData?.rating || ""}
-                       onChange={(e) => handleFieldChange("rating", e.target.value)}
+                       onChange={(e) => handleFieldNumChange("rating", e.target.value)}
                 />
             </div>
             <div>
                 <label> Профессия </label>
                 <select
-                    value={formData.position}
+                    value={formData.position || null}
                     onChange={(e) => handleFieldChange("position", e.target.value)}
                 >
                     <option value="">Выберите...</option>

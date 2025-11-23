@@ -31,7 +31,12 @@ const WorkerPage = () => {
             setTotalRecords(response.data.totalRecords);
             console.log(response.data.content.length+" и "+response.data.totalRecords);
         } catch (error) {
-            showToast('error', 'Ошибка', 'Не удалось загрузить работников');
+            if (error.response.status === 500) {
+                showToast('error', 'Ошибка', 'Сервер не отвечает');
+                return;
+            }
+            handleError(error);
+            //showToast('error', 'Ошибка', 'Не удалось загрузить работников');
         }
     };
     useEffect(() => {
@@ -49,11 +54,12 @@ const WorkerPage = () => {
         }
     };
     const onEditSuccess = async (workerData) => {
-        if (!selectedWorker?.id) return;
         try {
-            await Worker.updateWorker(selectedWorker.id, workerData);
+            console.log(workerData);
+            const {data: updated} = await Worker.updateWorker(selectedWorker.id, workerData);
             setEditDialogVisible(false);
             loadWorkers();
+            setSelectedWorker(updated)
             showToast('success', 'Успех', 'Данные работника обновлены');
         } catch (error) {
             handleError(error);
@@ -75,7 +81,7 @@ const WorkerPage = () => {
     const handleSelectionChange = (e) => setSelectedWorker(e.value);
     const handleDelete = () => {if (selectedWorker) setDeleteDialogVisible(true)};
     const handleError = (error) => {
-        if (!error.response){
+        if (!error.response ){
             showToast('error','Ошибка', 'Проверь подключение')
         }
         const data = error.response.data;

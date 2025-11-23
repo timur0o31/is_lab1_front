@@ -13,6 +13,12 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
     const [errors, setErrors] = useState({})
     const [showOfficialAddress, setShowOfficialAddress] = useState(false);
     const [showPostalAddress, setShowPostalAddress] = useState(false);
+    const normalizeFormData = (data) => ({
+        ...data,
+        annualTurnover: data.annualTurnover === "" ? null : data.annualTurnover,
+        employeesCount: data.employeesCount === "" ? null : data.employeesCount,
+        rating: data.rating === "" ? null : data.rating,
+    });
     useEffect (() => {
         if (organization) {
             setFormData({
@@ -33,7 +39,7 @@ const OrganizationForm = ({organization, onSubmit,onCancel}) => {
     }, [organization]);
     const handleSubmitForm = (e) => {
         e.preventDefault()
-        onSubmit(formData);
+        onSubmit(normalizeFormData(formData));
     }
     const handleFieldChange = (field, val) => {
         if (field === 'employeesCount') {
